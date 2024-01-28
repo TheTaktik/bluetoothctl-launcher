@@ -70,8 +70,8 @@ def perform_action(selected_device: Device, action: str):
     subprocess.run(command, check=True, encoding="utf-8")
 
 if __name__ == "__main__":
-    try:
-        while True:
+    while True:
+        try:
             devices = get_devices()
             selected_device = select_device_via_menu(devices)
             if selected_device == None:
@@ -80,8 +80,7 @@ if __name__ == "__main__":
             if selected_action == None:
                 continue
             perform_action(selected_device, selected_action)
-            break
-    except subprocess.CalledProcessError as e:
-        print(f"Error spawning process:\n\tcode: {e.returncode}\n\tstderr: {e.stderr}\n\tstdout: {e.stdout}", file=sys.stderr)
-        exit(1)
+        except subprocess.CalledProcessError as e:
+            print(f"Error spawning process:\n\tcode: {e.returncode}\n\tstderr: {e.stderr}\n\tstdout: {e.stdout}\nPress Enter to continue", file=sys.stderr)
+            input()
     
