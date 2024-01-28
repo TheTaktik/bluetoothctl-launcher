@@ -80,6 +80,7 @@ if __name__ == "__main__":
             if selected_action == None:
                 continue
             perform_action(selected_device, selected_action)
+            break
         except subprocess.CalledProcessError as e:
             print(f"Error spawning process:\n\tcode: {e.returncode}\n\tstderr: {e.stderr}\n\tstdout: {e.stdout}\nPress Enter to continue", file=sys.stderr)
             input()
