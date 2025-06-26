@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re
 import subprocess
 import sys
 from typing import Optional
@@ -29,7 +30,11 @@ def get_devices() -> list[Device]:
     result = subprocess.run(["bluetoothctl", "devices"], capture_output=True, check=True, encoding="utf-8")
     devices = []
     for d in result.stdout.strip().splitlines():
-        _, id, name = d.split(' ', maxsplit=2)
+        m = re.search("Device ((?:[0-9A-F]{2}:){5}[0-9A-F]{2}) (.+)", d)
+        if m is None:
+            continue
+        id = m.group(1)
+        name = m.group(2)
         status = subprocess.run(["bluetoothctl", "info", id], capture_output=True, check=True, encoding="utf-8")
         connected = status.stdout.find('Connected: yes') != -1
         paired = status.stdout.find('Paired: yes') != -1
